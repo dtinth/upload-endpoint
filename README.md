@@ -1,6 +1,6 @@
-# upload-server
+# upload-endpoint
 
-A simple server that lets me upload file and puts it in an S3-compatible cloud storage with IPFS-compatible path.
+A simple server that lets me upload file and puts it in an S3-compatible cloud storage.
 
 ## Environment Variables
 
@@ -19,19 +19,12 @@ UPLOAD_KEY=
 This server lets me upload files via `multipart/form-data`:
 
 ```sh
-curl -X POST "http://localhost:10846/upload?key=$UPLOAD_KEY" -F file=@hello.html
+curl -X PUT "http://localhost:10847/upload?path=hello.html" -H "Authorization: Bearer $UPLOAD_KEY" -F file=@fixtures
+/hello.html
 ```
 
-The file is saved to an S3-compatible storage, and a URL is returned in JSON format, thus making it compatible with [Uppy](https://uppy.io/)’s [XHR uploader](https://uppy.io/docs/xhr-upload/):
+The file is saved to an S3-compatible storage, and a URL is returned in JSON format:
 
 ```json
-{"url":"https://im.dt.in.th/ipfs/bafybeignkhelrt2ndg57sn7elg5eiaqkdtytrndjsutunlq6ye5unstnla/hello.html"}
+{ "url": "https://media.mjth.live/hello.html" }
 ```
-
-Note the URL pathname — it is constructed in a way such that if you put the exact same file on the IPFS network, you would get the same content identifier. This means that the same content can also be accessed via any IPFS gateway, given that the file is available on IPFS:
-
-> https://ipfs.io/ipfs/bafybeignkhelrt2ndg57sn7elg5eiaqkdtytrndjsutunlq6ye5unstnla/hello.html
-
-## How I use it
-
-I use it with [up.spacet.me](https://github.com/dtinth/up.spacet.me).
