@@ -18,13 +18,24 @@ UPLOAD_KEY=
 
 This server lets me upload files via `multipart/form-data`:
 
+### multipart/form-data upload
+
 ```sh
-curl -X PUT "http://localhost:10847/upload?path=hello.html" -H "Authorization: Bearer $UPLOAD_KEY" -F file=@fixtures
-/hello.html
+curl -X PUT "http://localhost:10847/upload?path=hello.html" -H "Authorization: Bearer $UPLOAD_KEY" -F file=@fixtures/hello.html
 ```
 
 The file is saved to an S3-compatible storage, and a URL is returned in JSON format:
 
 ```json
 { "url": "https://media.mjth.live/hello.html" }
+```
+
+### raw upload
+
+```sh
+curl -X PUT "http://localhost:10847/upload-raw?path=hello.txt" -H "Content-Type: text/plain" -H "Authorization: Bearer $UPLOAD_KEY" -d meow
+```
+
+```json
+{ "url": "https://media.mjth.live/hello.txt" }
 ```
